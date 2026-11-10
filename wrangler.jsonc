@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "convite-aniversario",
+  "main": "birthday-22/worker.js",
+  "compatibility_date": "2026-11-10",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "birthday-22/public",
+    "binding": "ASSETS"
+  }
+}

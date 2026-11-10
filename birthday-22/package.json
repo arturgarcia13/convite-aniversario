@@ -1,0 +1,13 @@
+{
+  "name": "artur-22-anos",
+  "version": "1.0.0",
+  "description": "Convite de 22 Anos de Artur Garcia com Confirmação de Presença (RSVP) e Painel Admin",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": ["convite", "rsvp", "birthday", "admin"],
+  "author": "Artur Garcia",
+  "license": "MIT"
+}

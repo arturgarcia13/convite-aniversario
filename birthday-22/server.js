@@ -3,9 +3,9 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 
-// If executed in Cloudflare Pages build environment, exit cleanly instead of hanging
-if (process.env.CF_PAGES === '1' || process.env.CF_PAGES) {
-  console.log('Ambiente de build do Cloudflare Pages detectado. Finalizando processo de build com sucesso.');
+// If executed in CI / Cloudflare Pages build environment, exit cleanly instead of hanging
+if (process.env.CF_PAGES || process.env.CI || process.env.CONTINUOUS_INTEGRATION) {
+  console.log('Ambiente de build/CI detectado. Finalizando processo de build com sucesso.');
   process.exit(0);
 }
 

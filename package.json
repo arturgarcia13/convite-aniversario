@@ -4,6 +4,6 @@
   "private": true,
   "scripts": {
     "build": "echo 'Static build ready in public/'",
-    "start": "node server.js"
+    "start": "echo 'Build ready'"
   }
 }

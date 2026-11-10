@@ -1,0 +1,7 @@
+# Intermediates and temporary workspaces
+work/
+.ai-jail
+*.log
+*:Zone.Identifier
+.DS_Store
+node_modules/

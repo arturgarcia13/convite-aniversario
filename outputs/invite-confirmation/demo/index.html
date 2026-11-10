@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Convite de 15 Anos — Maria Luiza (Arco-íris)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background-color: #E2C1BD;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'Montserrat', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Controls banner for interactive demo preview */
+    .demo-controls {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      background: rgba(53, 48, 47, 0.88);
+      backdrop-filter: blur(12px);
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      font-size: 12px;
+      transition: opacity 0.2s ease;
+    }
+    .demo-controls.hidden-for-capture,
+    body:has(#promoStage:target) .demo-controls,
+    .capture-mode .demo-controls {
+      display: none !important;
+    }
+    .demo-btn {
+      background: #7E6379;
+      color: #FFFFFF;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+    .demo-btn:hover {
+      background: #94748e;
+      transform: translateY(-1px);
+    }
+    .demo-btn.secondary {
+      background: rgba(255, 255, 255, 0.15);
+    }
+    .demo-btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    /* 720 x 1280 Canvas (exact match to video) */
+    .promo-stage {
+      width: 720px;
+      height: 1280px;
+      background: linear-gradient(180deg, #FAF3EC 0%, #F4E7DD 30%, #EFDBD0 60%, #E9D1CB 80%, #E6C8C3 100%);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(76, 50, 66, 0.35);
+      flex-shrink: 0;
+    }
+
+    /* Background blurred radial blobs */
+    .blob-center {
+      position: absolute;
+      top: 48%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 620px;
+      height: 720px;
+      background: radial-gradient(circle, rgba(243, 217, 200, 0.65) 0%, rgba(243, 217, 200, 0) 70%);
+      filter: blur(45px);
+      pointer-events: none;
+    }
+    .blob-bottom {
+      position: absolute;
+      bottom: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 520px;
+      height: 380px;
+      background: radial-gradient(circle, rgba(233, 216, 228, 0.6) 0%, rgba(233, 216, 228, 0) 70%);
+      filter: blur(55px);
+      pointer-events: none;
+    }
+
+    /* Outer Header typography */
+    .outer-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .outer-eyebrow {
+      position: absolute;
+      top: 184px;
+      left: 0;
+      width: 100%;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.36em;
+      color: #7A643B;
+      text-transform: uppercase;
+      text-indent: 0.36em;
+    }
+    .outer-title {
+      position: absolute;
+      top: 220px;
+      left: 0;
+      width: 100%;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 58px;
+      font-weight: 400;
+      color: #3F2125;
+      line-height: 1;
+    }
+
+    /* Outer Footer Wordmark */
+    .outer-footer {
+      position: absolute;
+      top: 1040px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      pointer-events: none;
+      z-index: 10;
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+    }
+    .brand-capitulo {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 43px;
+      font-weight: 400;
+      color: #47252D;
+      letter-spacing: -0.01em;
+      line-height: 1;
+    }
+    .brand-com {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 24px;
+      font-weight: 400;
+      color: #A98A50;
+      margin-left: 2px;
+      line-height: 1;
+    }
+
+    /* Phone Mockup */
+    .phone-mockup {
+      position: absolute;
+      top: 321px;
+      left: 208px;
+      width: 304px;
+      height: 624px;
+      background: #35302F;
+      border-radius: 44px;
+      box-shadow: 0 16px 36px rgba(90, 60, 60, 0.22);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-bottom: 2px solid rgba(214, 202, 193, 0.85);
+      z-index: 20;
+    }
+
+    /* Hardware Buttons */
+    .btn-volume-up {
+      position: absolute;
+      left: -3px;
+      top: 105px;
+      width: 3px;
+      height: 48px;
+      background: #272322;
+      border-radius: 3px 0 0 3px;
+    }
+    .btn-volume-down {
+      position: absolute;
+      left: -3px;
+      top: 162px;
+      width: 3px;
+      height: 48px;
+      background: #272322;
+      border-radius: 3px 0 0 3px;
+    }
+    .btn-power {
+      position: absolute;
+      right: -3px;
+      top: 130px;
+      width: 3px;
+      height: 56px;
+      background: #272322;
+      border-radius: 0 3px 3px 0;
+    }
+
+    /* Phone Notch */
+    .phone-notch {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 144px;
+      height: 26px;
+      background: #35302F;
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+      z-index: 50;
+    }
+    .phone-earpiece {
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 44px;
+      height: 3px;
+      background: #8E8782;
+      border-radius: 2px;
+      z-index: 60;
+    }
+
+    /* Phone Screen Container */
+    .phone-screen {
+      position: absolute;
+      top: 11px;
+      left: 12px;
+      width: 280px;
+      height: 602px;
+      border-radius: 34px;
+      overflow: hidden;
+      background: #E3DBE4;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Scrollable Page inside Phone */
+    .page-scroll {
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      scrollbar-width: none; /* Firefox */
+      position: relative;
+    }
+    .page-scroll::-webkit-scrollbar {
+      display: none; /* Chrome/Safari */
+    }
+
+    /* White flash veil for opening transition */
+    .flash-veil {
+      position: absolute;
+      inset: 0;
+      background: #FFFFFF;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 100;
+      transition: opacity 0.3s ease-in-out;
+    }
+    .flash-veil.flashing {
+      opacity: 0.92;
+    }
+
+    /* SECTION 1: COVER (HERO) */
+    .cover-section {
+      width: 280px;
+      height: 603px;
+      position: relative;
+      flex-shrink: 0;
+      background: url('assets/hero_bg.png') no-repeat center top;
+      background-size: cover;
+    }
+
+    .cover-eyebrow {
+      position: absolute;
+      top: 147px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 8px;
+      font-weight: 500;
+      letter-spacing: 0.20em;
+      color: #8A8288;
+      text-transform: uppercase;
+      text-indent: 0.20em;
+    }
+
+    .cover-name {
+      position: absolute;
+      top: 204px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: 48px;
+      font-weight: 400;
+      color: #5D5561;
+      line-height: 1;
+    }
+
+    .cover-xv-row {
+      position: absolute;
+      top: 272px;
+      left: 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+    }
+    .xv-rule {
+      width: 26px;
+      height: 1px;
+      background: #8A8288;
+      opacity: 0.55;
+    }
+    .xv-text {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      color: #5D5561;
+      text-indent: 0.18em;
+    }
+
+    .cover-date {
+      position: absolute;
+      top: 312px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: 11.5px;
+      letter-spacing: 0.15em;
+      color: #5D5561;
+    }
+
+    .cover-guest-label {
+      position: absolute;
+      top: 377px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 7.5px;
+      font-weight: 600;
+      letter-spacing: 0.20em;
+      color: #8A8288;
+      text-transform: uppercase;
+      text-indent: 0.20em;
+    }
+
+    .cover-guest-name {
+      position: absolute;
+      top: 391px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 13.5px;
+      font-weight: 400;
+      color: #5D5561;
+    }
+
+    .cta-button {
+      position: absolute;
+      top: 425px;
+      left: 47px;
+      width: 185px;
+      height: 40px;
+      background: linear-gradient(135deg, #655365 0%, #7E6379 100%);
+      border-radius: 9999px;
+      box-shadow: 0 7px 18px rgba(76, 50, 66, 0.24);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      color: #FFFFFF;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .cta-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 9px 22px rgba(76, 50, 66, 0.32);
+    }
+    .cta-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+    .cta-arrow {
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    /* SECTION 2: DETAILS & COUNTDOWN */
+    .details-section {
+      width: 280px;
+      background: #E3DBE4;
+      padding: 38px 16px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .details-eyebrow {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 7.5px;
+      font-weight: 500;
+      letter-spacing: 0.20em;
+      color: #8A8288;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .details-name {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: 34px;
+      font-weight: 400;
+      color: #5D5561;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .details-meta {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: 11px;
+      color: #5D5561;
+      margin-top: 6px;
+      margin-bottom: 8px;
+    }
+    .details-tagline {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9.5px;
+      color: #6C6068;
+      line-height: 1.5;
+      max-width: 210px;
+      margin-bottom: 24px;
+    }
+
+    .countdown-eyebrow {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 7px;
+      font-weight: 600;
+      letter-spacing: 0.20em;
+      color: #8A8288;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .countdown-tile {
+      width: 46px;
+      height: 60px;
+      background: #FEF8EE;
+      border-radius: 11px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(76, 50, 66, 0.06);
+    }
+    .countdown-number {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 21px;
+      font-weight: 600;
+      color: #6A635A;
+      line-height: 1;
+    }
+    .countdown-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 6.5px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      color: #8A8288;
+      margin-top: 3px;
+    }
+
+    /* 7-dot strip */
+    .rainbow-dots {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 14px;
+    }
+    .rainbow-dots.left-aligned {
+      justify-content: flex-start;
+      margin-top: 6px;
+      margin-bottom: 14px;
+    }
+    .dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+    }
+    .dot-1 { background-color: #B47E8E; }
+    .dot-2 { background-color: #C8917F; }
+    .dot-3 { background-color: #D8C58A; }
+    .dot-4 { background-color: #A9B49F; }
+    .dot-5 { background-color: #9FAABB; }
+    .dot-6 { background-color: #8C93AC; }
+    .dot-7 { background-color: #9C8F9F; }
+
+    /* SECTION 3: DATA & LOCAL */
+    .section-container {
+      width: 280px;
+      padding: 0 15px 24px;
+      background: #E3DBE4;
+    }
+    .section-eyebrow {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 7px;
+      font-weight: 600;
+      letter-spacing: 0.20em;
+      color: #8A8288;
+      text-transform: uppercase;
+    }
+    .section-heading {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 28px;
+      font-weight: 400;
+      color: #5D5561;
+      line-height: 1.1;
+      margin: 4px 0 4px;
+    }
+
+    /* White floating card */
+    .ui-card {
+      background: #FCFAFB;
+      border-radius: 14px;
+      padding: 18px 16px;
+      box-shadow: 0 7px 22px rgba(76, 50, 66, 0.08);
+    }
+
+    .date-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .date-text {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: 11px;
+      color: #5D5561;
+    }
+    .time-chip {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 10px;
+      font-weight: 600;
+      color: #7A643B;
+      background: rgba(122, 100, 59, 0.10);
+      padding: 2px 8px;
+      border-radius: 9999px;
+    }
+
+    .card-divider {
+      height: 1px;
+      background: #EFE8E8;
+      margin: 10px 0 12px;
+    }
+
+    .address-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 8px;
+      font-weight: 600;
+      color: #8A8288;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .venue-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #5D5561;
+      margin-top: 4px;
+    }
+    .address-body {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 8.5px;
+      color: #6C6068;
+      line-height: 1.45;
+      margin-top: 4px;
+    }
+
+    .copy-chip-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 10px;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      border: 1px solid #C1BABC;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 7px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      color: #6C6068;
+      background: transparent;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .copy-chip-btn:hover {
+      background: rgba(193, 186, 188, 0.15);
+    }
+
+    .map-container {
+      margin-top: 14px;
+      border-radius: 8px;
+      overflow: hidden;
+      width: 100%;
+      line-height: 0;
+    }
+    .map-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* SECTION 4: MOMENTOS DA FESTA */
+    .card-subtitle {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #5D5561;
+      margin-bottom: 16px;
+    }
+
+    .timeline-list {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .timeline-item {
+      display: flex;
+      gap: 12px;
+      position: relative;
+      padding-bottom: 22px;
+    }
+    .timeline-item:last-child {
+      padding-bottom: 8px;
+    }
+
+    /* Vertical connector between icons */
+    .timeline-item:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 14px;
+      top: 30px;
+      bottom: 0;
+      width: 1px;
+      background: #E9DCD4;
+    }
+
+    .icon-circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #F6E9E2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 2;
+    }
+    .icon-circle svg {
+      width: 14px;
+      height: 14px;
+      fill: #7A643B;
+    }
+
+    .timeline-content {
+      flex: 1;
+    }
+    .item-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #5D5561;
+      line-height: 1.2;
+    }
+    .item-body {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 8.5px;
+      color: #6C6068;
+      line-height: 1.6;
+      margin-top: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Controls for human testing & preview -->
+  <div class="demo-controls" id="demoControls">
+    <span>Modo Prévia:</span>
+    <button class="demo-btn" onclick="openInvitation()">▶ Abrir e Rolar Convite</button>
+    <button class="demo-btn secondary" onclick="resetCover()">↺ Resetar para Capa</button>
+    <button class="demo-btn secondary" onclick="hideControlsForScreenshot()">📸 Ocultar Botões</button>
+  </div>
+
+  <!-- 720 x 1280 Promo Mockup Stage -->
+  <div class="promo-stage" id="promoStage">
+    <!-- Blurred gradient glows -->
+    <div class="blob-center"></div>
+    <div class="blob-bottom"></div>
+
+    <!-- Outer Header (TEMA / Arco-íris) -->
+    <div class="outer-header">
+      <div class="outer-eyebrow">TEMA</div>
+      <div class="outer-title">Arco-íris</div>
+    </div>
+
+    <!-- Center Phone Mockup Frame -->
+    <div class="phone-mockup">
+      <div class="btn-volume-up"></div>
+      <div class="btn-volume-down"></div>
+      <div class="btn-power"></div>
+      <div class="phone-earpiece"></div>
+      <div class="phone-notch"></div>
+
+      <!-- Mobile Screen (280x603) -->
+      <div class="phone-screen">
+        <div class="flash-veil" id="flashVeil"></div>
+        <div class="page-scroll" id="pageScroll">
+
+          <!-- 1. Capa (Cover Hero) -->
+          <div class="cover-section" id="coverSection">
+            <div class="cover-eyebrow">CONVITE DE 15 ANOS</div>
+            <div class="cover-name">Maria Luiza</div>
+            <div class="cover-xv-row">
+              <div class="xv-rule"></div>
+              <div class="xv-text">XV</div>
+              <div class="xv-rule"></div>
+            </div>
+            <div class="cover-date">12.11.26</div>
+
+            <div class="cover-guest-label">CONVITE PARA</div>
+            <div class="cover-guest-name">Tia Maria e família</div>
+
+            <button class="cta-button" onclick="openInvitation()" aria-label="Abrir convite">
+              <span class="cta-label">Abrir convite</span>
+              <span class="cta-arrow">→</span>
+            </button>
+          </div>
+
+          <!-- 2. Detalhes & Contagem Regressiva -->
+          <div class="details-section" id="detailsSection">
+            <div class="details-eyebrow">CONVITE DE 15 ANOS</div>
+            <div class="details-name">Maria Luiza</div>
+            <div class="cover-xv-row" style="position: static; margin-bottom: 4px;">
+              <div class="xv-rule"></div>
+              <div class="xv-text">XV</div>
+              <div class="xv-rule"></div>
+            </div>
+            <div class="details-meta">15 anos • 12.11.26</div>
+            <div class="details-tagline">Uma noite dourada para celebrar os 15 anos da Maria.</div>
+
+            <div class="countdown-eyebrow">FALTA POUCO PARA CELEBRAR</div>
+            <div class="countdown-tile">
+              <span class="countdown-number" id="countdownDays">41</span>
+              <span class="countdown-label">DIAS</span>
+            </div>
+
+            <div class="rainbow-dots">
+              <div class="dot dot-1"></div>
+              <div class="dot dot-2"></div>
+              <div class="dot dot-3"></div>
+              <div class="dot dot-4"></div>
+              <div class="dot dot-5"></div>
+              <div class="dot dot-6"></div>
+              <div class="dot dot-7"></div>
+            </div>
+          </div>
+
+          <!-- 3. Data e Local -->
+          <div class="section-container" id="dataSection">
+            <div class="section-eyebrow">MARIA LUIZA · 15 ANOS</div>
+            <div class="section-heading">Data e local</div>
+            <div class="rainbow-dots left-aligned">
+              <div class="dot dot-1"></div>
+              <div class="dot dot-2"></div>
+              <div class="dot dot-3"></div>
+              <div class="dot dot-4"></div>
+              <div class="dot dot-5"></div>
+              <div class="dot dot-6"></div>
+              <div class="dot dot-7"></div>
+            </div>
+
+            <div class="ui-card">
+              <div class="date-row">
+                <span class="date-text">quinta-feira, 12 de novembro de 2026</span>
+                <span class="time-chip">20:30h</span>
+              </div>
+              <div class="card-divider"></div>
+
+              <div class="address-label">Endereço</div>
+              <div class="venue-title">Casa Pérola</div>
+              <div class="address-body">
+                Av. Paulista, 1500 - Bela Vista<br>
+                São Paulo - SP, 01310-100
+              </div>
+
+              <button class="copy-chip-btn" onclick="copyAddress(this)">
+                <span>📋</span>
+                <span>COPIAR ENDEREÇO</span>
+              </button>
+
+              <div class="map-container">
+                <img src="assets/map.png" alt="Mapa do local Casa Pérola" class="map-img">
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Momentos da Festa -->
+          <div class="section-container" id="momentosSection">
+            <div class="section-eyebrow">MARIA LUIZA · 15 ANOS</div>
+            <div class="section-heading">Momentos da festa</div>
+            <div class="rainbow-dots left-aligned">
+              <div class="dot dot-1"></div>
+              <div class="dot dot-2"></div>
+              <div class="dot dot-3"></div>
+              <div class="dot dot-4"></div>
+              <div class="dot dot-5"></div>
+              <div class="dot dot-6"></div>
+              <div class="dot dot-7"></div>
+            </div>
+
+            <div class="ui-card">
+              <div class="card-subtitle">Programação da festa</div>
+
+              <div class="timeline-list">
+                <!-- Item 1: Recepção -->
+                <div class="timeline-item">
+                  <div class="icon-circle">
+                    <!-- Wine Glass SVG -->
+                    <svg viewBox="0 0 24 24">
+                      <path d="M5 3h14v3c0 3.31-2.69 6-6 6v7h4v2H7v-2h4v-7c-3.31 0-6-2.69-6-6V3zm2 2v1c0 2.21 1.79 4 4 4s4-1.79 4-4V5H7z"/>
+                    </svg>
+                  </div>
+                  <div class="timeline-content">
+                    <div class="item-title">Recepção</div>
+                    <div class="item-body">Um momento para receber os convidados e começar a comemoração.</div>
+                  </div>
+                </div>
+
+                <!-- Item 2: Entrada -->
+                <div class="timeline-item">
+                  <div class="icon-circle">
+                    <!-- Crown SVG -->
+                    <svg viewBox="0 0 24 24">
+                      <path d="M5 19h14v2H5v-2zm0-3.5L2 9l6 3 4-7 4 7 6-3-3 6.5H5z"/>
+                    </svg>
+                  </div>
+                  <div class="timeline-content">
+                    <div class="item-title">Entrada da debutante</div>
+                    <div class="item-body">A chegada da debutante marca o início de um dos momentos mais especiais da noite.</div>
+                  </div>
+                </div>
+
+                <!-- Item 3: Valsa -->
+                <div class="timeline-item">
+                  <div class="icon-circle">
+                    <!-- Ballet Shoe / Music SVG -->
+                    <svg viewBox="0 0 24 24">
+                      <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                    </svg>
+                  </div>
+                  <div class="timeline-content">
+                    <div class="item-title">Valsa</div>
+                    <div class="item-body">A tradicional valsa dos 15 anos, ao lado de pessoas especiais.</div>
+                  </div>
+                </div>
+
+                <!-- Item 4: Jantar -->
+                <div class="timeline-item">
+                  <div class="icon-circle">
+                    <!-- Utensils / Plate SVG -->
+                    <svg viewBox="0 0 24 24">
+                      <path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/>
+                    </svg>
+                  </div>
+                  <div class="timeline-content">
+                    <div class="item-title">Jantar</div>
+                    <div class="item-body">Buffet completo preparado especialmente para celebrar juntos.</div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Outer Footer (Capitulo15.com) -->
+    <div class="outer-footer">
+      <span class="brand-capitulo">Capitulo15</span><span class="brand-com">.com</span>
+    </div>
+  </div>
+
+  <script>
+    if (window.location.search.includes('capture') || window.location.hash.includes('capture')) {
+      document.body.classList.add('capture-mode');
+    }
+
+    // Smooth scroll down the invitation
+    function openInvitation() {
+      const veil = document.getElementById('flashVeil');
+      const scroller = document.getElementById('pageScroll');
+
+      // Brief gentle flash-through-white transition
+      veil.classList.add('flashing');
+      setTimeout(() => {
+        scroller.scrollTo({ top: 603, behavior: 'smooth' });
+        setTimeout(() => {
+          veil.classList.remove('flashing');
+          // continue scrolling down to mimic video sequence
+          setTimeout(() => {
+            scroller.scrollTo({ top: 1050, behavior: 'smooth' });
+            setTimeout(() => {
+              scroller.scrollTo({ top: 1550, behavior: 'smooth' });
+            }, 2000);
+          }, 1800);
+        }, 300);
+      }, 150);
+    }
+
+    function resetCover() {
+      const scroller = document.getElementById('pageScroll');
+      scroller.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function hideControlsForScreenshot() {
+      const controls = document.getElementById('demoControls');
+      controls.classList.add('hidden-for-capture');
+    }
+
+    function copyAddress(btn) {
+      const text = "Av. Paulista, 1500 - Bela Vista, São Paulo - SP, 01310-100";
+      navigator.clipboard.writeText(text).then(() => {
+        const original = btn.innerHTML;
+        btn.innerHTML = "<span>✓</span><span>COPIADO!</span>";
+        setTimeout(() => {
+          btn.innerHTML = original;
+        }, 2000);
+      });
+    }
+
+    // Auto-compute countdown days to 2026-11-12 if needed (default static 41 to match clip)
+    const eventDate = new Date('2026-11-12T20:30:00');
+    const now = new Date();
+    const diffDays = Math.ceil((eventDate - now) / (1000 * 60 * 60 * 24));
+    if (diffDays > 0) {
+      // document.getElementById('countdownDays').innerText = diffDays;
+    }
+  </script>
+</body>
+</html>

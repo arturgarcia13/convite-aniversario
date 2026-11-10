@@ -1,0 +1,58 @@
+[
+  {
+    "category": "setup",
+    "description": "Extract skill bundle and verify scripts run",
+    "steps": ["unzip design-reference-replicator.zip", "run extract_frames.py on the reference"],
+    "passes": true,
+    "evidence": "skill at .agents/skills/design-reference-replicator; frames in work/frames; metadata 720x1280 30fps 10s"
+  },
+  {
+    "category": "analysis",
+    "description": "Inventory every screen and component visible in the video",
+    "steps": ["view contact sheets", "crop phone screen", "list screens in reading order"],
+    "passes": true,
+    "evidence": "screen crop (220,332) 280x603 stable in all frames; cover, details, data, map, momentos, programme, outer promo documented in design-spec.md 9.1-9.5"
+  },
+  {
+    "category": "analysis",
+    "description": "Measure colors, typography, layout, shape, motion",
+    "steps": ["palette.py", "measure.py bbox/profile/radius", "dense frame windows for transitions"],
+    "passes": true,
+    "evidence": "evidence/measurements.md: palettes, row profiles per screen, screen bounds, map/card extents, type-size derivation; 13-frame transition window 2.4-3.2s"
+  },
+  {
+    "category": "deliverable",
+    "description": "Write design-spec.md with the 13 template sections",
+    "steps": ["follow references/output-template.md"],
+    "passes": true,
+    "evidence": "outputs/invite-confirmation/design-spec.md; sections 1-13 present; every value tagged M/I/?"
+  },
+  {
+    "category": "deliverable",
+    "description": "Write tokens.json with per-leaf [M]/[I]/[?] tags",
+    "steps": ["derive from measured spec", "validate JSON"],
+    "passes": true,
+    "evidence": "outputs/invite-confirmation/tokens.json; python3 -m json.tool exits 0; hex set identical to design-spec.md"
+  },
+  {
+    "category": "deliverable",
+    "description": "Write recreation-prompt.md variant A (image) and B (build brief)",
+    "steps": ["follow references/output-template.md"],
+    "passes": true,
+    "evidence": "outputs/invite-confirmation/recreation-prompt.md; variants A and B; numbers reconciled with tokens.json"
+  },
+  {
+    "category": "deliverable",
+    "description": "Collect evidence/ and pass the completeness audit",
+    "steps": ["save frames/crops/grids used", "run checklist section M"],
+    "passes": true,
+    "evidence": "evidence/ 8 frames + 5 sheets + 20 crops + measurements.md; audit section 13 all checked except the fidelity loop, which requires a built copy"
+  },
+  {
+    "category": "fidelity",
+    "description": "Build interactive copy, render headlessly, and close loop with compare.py",
+    "steps": ["build demo/index.html", "headless Chrome render at 720x1280", "compare.py against 0.00s.png and cover.png", "generate fidelity-report.md"],
+    "passes": true,
+    "evidence": "outputs/invite-confirmation/demo/index.html, outputs/invite-confirmation/fidelity-report.md (MAE 5.79, SSIM 0.9327), evidence/comparison/ heatmaps and side-by-side images"
+  }
+]

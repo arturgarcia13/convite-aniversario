@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "build": "echo 'Static build ready in public/'",
     "dev": "node --watch server.js"
   },
   "keywords": ["convite", "rsvp", "birthday", "admin"],

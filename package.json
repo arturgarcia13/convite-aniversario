@@ -1,0 +1,9 @@
+{
+  "name": "artur-22-anos",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "echo 'Static build ready in public/'",
+    "start": "node server.js"
+  }
+}

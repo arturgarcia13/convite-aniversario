@@ -3,6 +3,12 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 
+// If executed in Cloudflare Pages build environment, exit cleanly instead of hanging
+if (process.env.CF_PAGES === '1' || process.env.CF_PAGES) {
+  console.log('Ambiente de build do Cloudflare Pages detectado. Finalizando processo de build com sucesso.');
+  process.exit(0);
+}
+
 const PORT = process.env.PORT || 3000;
 const DATA_FILE = path.join(__dirname, 'data', 'rsvps.json');
 const PUBLIC_DIR = path.join(__dirname, 'public');
